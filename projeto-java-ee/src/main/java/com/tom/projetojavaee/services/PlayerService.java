@@ -18,5 +18,17 @@ public class PlayerService {
         return playerRepository.findAllPlayers();
     }
 
+    public List<Player> listPlayersWithName(String name) {
+        return this.playerRepository.findAllPlayersWithName(name);
+    }
+
+    public List<Player> listPlayersWithNameAndPosition(String name, String position) {
+        return playerRepository.findAllPlayersWithNameAndPosition(name,position);
+    }
+
+    public List<Player> listPlayersBelongTeam() {
+        return this.playerRepository.findAllPlayersBelongTeam();
+    }
+
     
 }

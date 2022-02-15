@@ -10,5 +10,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PlayerRepository extends JpaRepository<Player, Long>,PlayerRepositoryCustom{
 
     List<Player> findAllPlayers();
+
+    List<Player> findAllPlayersWithName(String name);
+
+    List<Player> findAllPlayersWithNameAndPosition(String name, String position);
+
+    List<Player> findAllPlayersBelongTeam();
     
 }
