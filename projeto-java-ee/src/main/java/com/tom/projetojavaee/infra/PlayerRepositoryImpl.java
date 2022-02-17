@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.tom.projetojavaee.custom.PlayerRepositoryCustom;
+import com.tom.projetojavaee.domain.League;
 import com.tom.projetojavaee.domain.Player;
 
 import org.springframework.stereotype.Repository;
@@ -58,4 +59,30 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
                 .getResultList();
     }
 
+    @Override
+    public List<Player> findAllPlayersByTeamCity(String city) {
+        // TODO Auto-generated method stub
+        String psql = "SELECT DISTINCT p FROM Player p, IN (p.teams) AS t WHERE t.city = :city ";
+        return entityManager.createQuery(psql, Player.class)
+                .setParameter("city", city)
+                .getResultList();
+    }
+
+    @Override
+    public List<Player> findAllByTeamsLeague(League league) {
+        // TODO Auto-generated method stub
+        String psql = "SELECT DISTINCT p FROM Player p, IN (p.teams) AS t WHERE t.league = :league";
+        return entityManager.createQuery(psql, Player.class)
+                .setParameter("league", league)
+                .getResultList();
+    }
+
+    @Override
+    public List<Player> findAllBy(String sport) {
+        // TODO Auto-generated method stub
+        String jpql = "SELECT DISTINCT p FROM Player p, IN (p.teams) AS t WHERE t.league.sport = :sport";
+        return entityManager.createQuery(jpql, Player.class)
+                .setParameter("sport", sport)
+                .getResultList();
+    }
 }

@@ -1,0 +1,65 @@
+
+ Consultas simples
+
+Consulta Basica de Seleção
+ [SELECT p FROM Player p]
+  Dados Recuperados: todos os Players
+  Descrição: A cláusula FROM declara uma variavel de identificação p, omitindo a palavra chave AS. Caso não fosse omitida
+            seria
+    [SELECT p FROM Player AS p]
+
+
+    Eliminando valores duplicados
+ [SELECT DISTINCT p FROM Player WHERE p.position = ?1]
+    Dados Recuperados: Jogadores com posição especificada pelo parâmetro da consulta.
+    Descrição: A palavra-chave DISTINCT elimina os valores duplicados
+
+ A cláusula WHERE restringe os Jogadores recuperados verificando sua posição, o elemento ?1 denota o parâmetro de entrada
+de parâmetro da consulta.
+
+
+ Usando parâmetros nomeados
+ [SELECT DISTINCT p FROM Player p WHERE P.position = :position AND p.name = :name]
+    Dados recuperados: Os Players que tem especificada posição e nome;
+    Descrição: Os elementos position e name são campos persitentes da entidade Player, a cláusula WHERE compara os valores
+com os valores nomeados da consulta, defidos usando a função Query.setNamedParameter usando ':' seguido por um identifcador
+
+
+    Consultas que navegam para entidades relacionadas 
+ Na linguagem de consulta, uma expressão pode percorrer para entidades relacionadas. Essas expressões são as principais diferenças
+entre a liguagem de consulta Java Persistence e a linguagem SQL. As consultas navegam  para entidades relacionadas, enquan-
+to o SQL une as tabelas.
+ 
+ Uma consulta simples com relacionamento.
+ [select distinct p from Player p, in(p.teams) t]
+  Dados recuperados: todos os Player que pertence a uma teams
+  Descrição: a cláusula from declara  duas variaveis de identificação 'p' e 't', variavel p->Player, e t--> Team. A palavra-
+chave 'in' siginifica que o teams é uma coleçãao de entidades relacionadas, A expressão p.teams navega de um jogador para   
+para sua equipe relacionada. A expressão p.teams é o operador de navegação
+
+ Tambem pode ser usada a expressão JOIN para fazer a mesma consulta
+ [select distinct p from Player p join p.teams t]
+ Esta query pode ser rescrita como 
+ [select distinct p from Player p where p.teams is not empty]
+
+
+    Navegando para relacionamento de valor unico F.
+ Use a cláusula JOIN para navegar até um campo de relacionamento de valor unico.
+  [select t from Team t join t.league l where l.sport = 'soccer' or l.sport = 'football']
+
+  Neste exemplo a consulta ira voltar todos os times que estão em ligas de soccer e football.
+
+    Atravessando relacionamentos com parametro de entradas
+ [select distinct p from Player p, in(p.teams) as t where t.city = :city]
+ [select distinct p from Player p join p.teams as t where t.city = :city]
+    Dados recuperados: Players cujo o team pertence a cidade especificada.
+    Descrição: semelhante a consulta anterio, porem acrescenta um parametro de entrada. A palavra-chave 'as' é opicional na
+cláusula from. Na cláusula where, o periodo anterior à variavel persitente city é um delimitador, não um operador de 
+navegação 
+   
+        Atravessando varios relacionamentos
+ [select distinct p from Player p, in(p.teams) t where t.league.sport = :sport ]
+    Dados recuperados: Os Players que participam do sport especificada
+    Descrição: O campo sport pertence a entidade league. Para chegar ao campo do sport, a consulta deve passar pelos campos
+Player --> Team --> League--sport
+
