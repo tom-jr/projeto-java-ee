@@ -1,0 +1,125 @@
+        Full Query Language Syntax
+
+Esta seção discute a sixtaxe da liguagem de consulta conforme definido na especificação
+Java Persistence API 2.0 
+
+    Symbolos
+ Symbol      Descrição
+
+ ::=        O elemento a esquerda do símbolo e definido pelas construções á direita
+ *          A construção anterior pode ocorrer zero ou mais vezes
+ {...}      As construções dentro das chaves são agrupadas   
+ [...]      As construções dentro do colchetes são opcionais
+ |          An exclusive OR
+
+
+
+ Clásula FROM
+  Clásula FROM define o dominio da consulta, declarando variáveis de identificação.
+  
+ Identifiers
+  Sequencia de um ou mais caracters. O primeiro deve ser um caracter valido (letra,$,_) em um identificador la linguagem Java
+um identificador não pode ser o mesmo que uma palavra chave. Lista de palavras-chaves
+
+ -ABS
+ -ALL
+ -AND
+ -ANY
+ -AS
+ -ASC
+ -AVG
+ -BETWEEN
+ -BIT_LENGTH
+ -BOTH
+ -BY
+ -CASE
+ -CHAR_LENGTH
+ -CHARACTER_LENGTH
+ -CLASS
+ -COALESCE
+ -CONCAT
+ -COUNT
+ -CURRENT_DATE
+ -CURRENT_TIMESTAMP
+ -DELETE
+ -DESC
+ -DISTINCT
+ -ELSE
+ -EMPTY
+ -END
+ -ENTRY
+ -ESCAPE
+ -EXISTS
+ -FALSE
+ -FETCH
+ -FROM
+ -GROUP
+ -HAVING
+ -IN
+ -INDEX
+ -INNER
+ -IS
+ -JOIN
+ -KEY
+ -LEADING
+ -LEFT
+ -LENGTH
+ -LIKE
+ -LOCATE
+ -LOWER
+ -MAX
+ -MEMBER
+ -MIN
+ -MOD
+ -NEW
+ -NOT
+ -NULL
+ -NULLIF
+ -OBJECT
+ -OF
+ -OR
+ -ORDER
+ -OUTER
+ -POSITION
+ -SELECT
+ -SET
+ -SIZE
+ -SOME
+ -SQRT
+ -SUBSTRING
+ -SUM
+ -THEN
+ -TRAILING
+ -TRIM
+ -TRUE
+ -TYPE
+ -UNKNOWN
+ -UPDATE
+ -UPPER
+ -VALUE
+ -WHEN
+ -WHERE
+
+
+        Variavel de identificador
+ Uma variavel de identificação é um identificador declarado na cláusula FROM. Embora possam referenciar as variaveis de 
+identificação, as cláusula SELECT e WHERE não pode declara-las.
+ As variaaveis de identificação tem as mesma restrições de nomeação que os identificadores. 
+
+    JOIN
+ O operador JOIN é usado para percorrer relacionamentos entre entidades e é funcionalmente semelhante ao operador IN 
+
+ [SELECT c FROM  Customer c JOIN c.orders o WHERE c.status = 1 AND o.totalPrice > 1000 ]
+
+ A keyword INNER é opcional
+
+ [SELECT c FROM Customer c INNER JOIN c.orders o WHERE c.status = 1 AND o.totalPrice > 1000]
+
+ Exemplo é equivalente a:
+        [SELECT c FROM Customer c, IN (c.orders) o WHERE c.status = 1 AND o.totalPrice > 1000]
+
+ Tambem pode ingressar em relacionamento de valor unico:
+ [SELECT t FROM Team t JOIN t.league l WHERE l.sport = :sport] 
+
+
+ [TERMINAR OS EXEMPLOS E FAZER OS METODOS E TESTAR, INNER JOIN LEFT OUTER JOIN RIGHT OUTER JOIN]
