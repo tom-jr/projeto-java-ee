@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import com.tom.projetojavaee.custom.PlayerRepositoryCustom;
 import com.tom.projetojavaee.domain.League;
@@ -17,14 +21,14 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Override
-    public List<Player> findAllPlayers() {
-        // TODO Auto-generated method stub
-        String jpql = "SELECT p FROM Player p";
+    // @Override
+    // public List<Player> findAllPlayers() {
+    // // TODO Auto-generated method stub
+    // String jpql = "SELECT p FROM Player p";
 
-        return this.entityManager.createQuery(jpql, Player.class)
-                .getResultList();
-    }
+    // return this.entityManager.createQuery(jpql, Player.class)
+    // .getResultList();
+    // }
 
     @Override
     public List<Player> findAllPlayersWithName(String name) {
@@ -84,5 +88,21 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
         return entityManager.createQuery(jpql, Player.class)
                 .setParameter("sport", sport)
                 .getResultList();
+    }
+
+    // implementation by Criteira API
+    @Override
+    public List<Player> findAllPlayers() {
+        // TODO Auto-generated method stub
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Player> criteria = builder.createQuery(Player.class);
+        Root<Player> rootPlayer = criteria.from(Player.class);
+
+        criteria.select(rootPlayer);
+
+        TypedQuery<Player> query = entityManager.createQuery(criteria);
+        List<Player> list = query.getResultList();
+
+        return list;
     }
 }
