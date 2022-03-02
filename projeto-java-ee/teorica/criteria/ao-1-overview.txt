@@ -1,0 +1,43 @@
+A seguinte consulta Criteria simples retorna todas as instâncias da entidade Pet na fonte de dados
+
+EntityManager em = ...;
+CriteriaBuilder cb = em.getCriteriaBuilder();
+CriteriaQuery<Pet> cq = cb.createQuery(Pet.class);
+Root<Pet> pet = cq.from(Pet.class);
+cq.select(pet);
+TypedQuery<Pet> q = em.createQuery(cq);
+List<Pet> allPets = q.getResultList();
+
+equivalente ao JPQL 
+ [SELECT p FROM Pet p]
+
+        Etapas Basicas para se criar uma criteria TypedQuery
+    
+ -Use uma instância EntityManager para criar um objeto CriteriaBuilder
+ -Crie um objeto de consulta criando uma instância da interface CriteriaQuery.Os atributos deste objeto de consulta serão modificados com os detalhes da
+consulta.
+ -Defina o root da consulta chamando o método from no objeto CriteriaQuery
+ -Especifique qual será o tipo do resultado da consulta chamando o método select do objeto CriteriaQuery
+ -Prepare a consulta para execução criando uma instância TypedQuery<T>, especificando o tipo do resultado da consulta
+ -Execute a consulta chamando o método getResultList no objeto TypedQuery<T>. Como essa consulta retorna uma coleção 
+ de entidades, o resultado é armazenado em uma lista
+
+ Para criar uma instância do CriteriaBuilder, chama-se o método getCriteriaBuilder da instancia de EntityManager
+       CriteriaBuilder cb = em.getCriteriaBuilder();
+ 
+ Use o CriteriaBuilder para criar um objeto de consulta
+       CriteriaQuery<Entity> criteria = criteriaBuilder.createQuery(Entity.class);
+
+ Chame o método from do objeto de consulta para definir a clausula FROM da consulta e especificar o root.
+       Root<Entity> root = criteria.from(Entity.class);
+
+ Chame o método SELECT do objeto de consulta, para definir a clausula select.
+       criteria.select(root);
+
+ Agora use o objeto da consulta para criar um Objeto TypedQuery que pode ser executado na fonte de dados. As modificações no objeto de consulta são capturadas para criar 
+pronta para execução
+       TypedQuery<Entity> query = entityManager.createQuery(criteria);
+
+ Execute esse objeto de consulta digitado chamando seu método getResultList, pois essa consulta retornará várias instâncias de entidade. A instrução a seguir
+armazena os resultados em um objeto com valor de coleção List<Entity>
+       List<Entity> entities = criteria.getResultList();
