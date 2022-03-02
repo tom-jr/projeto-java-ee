@@ -8,6 +8,8 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 
 import com.tom.projetojavaee.custom.PlayerRepositoryCustom;
 import com.tom.projetojavaee.domain.League;
@@ -91,18 +93,41 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
     }
 
     // implementation by Criteira API
+    // @Override
+    // public List<Player> findAllPlayers() {
+    // // TODO Auto-generated method stub
+    // CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+    // CriteriaQuery<Player> criteria = builder.createQuery(Player.class);
+    // Root<Player> rootPlayer = criteria.from(Player.class);
+
+    // criteria.select(rootPlayer);
+
+    // TypedQuery<Player> query = entityManager.createQuery(criteria);
+    // List<Player> list = query.getResultList();
+
+    // return list;
+    // }
+
+    // implementação criteria utilizando metamodel
+
     @Override
     public List<Player> findAllPlayers() {
         // TODO Auto-generated method stub
+
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+
         CriteriaQuery<Player> criteria = builder.createQuery(Player.class);
-        Root<Player> rootPlayer = criteria.from(Player.class);
 
-        criteria.select(rootPlayer);
+        Metamodel model = entityManager.getMetamodel();
 
+        EntityType<Player> Player_ = model.entity(Player.class);
+
+        Root<Player> root = criteria.from(Player_);
+
+        criteria.select(root);
         TypedQuery<Player> query = entityManager.createQuery(criteria);
-        List<Player> list = query.getResultList();
 
+        List<Player> list = query.getResultList();
         return list;
     }
 }

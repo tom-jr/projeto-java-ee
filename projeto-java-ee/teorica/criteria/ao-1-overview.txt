@@ -41,3 +41,51 @@ pronta para execução
  Execute esse objeto de consulta digitado chamando seu método getResultList, pois essa consulta retornará várias instâncias de entidade. A instrução a seguir
 armazena os resultados em um objeto com valor de coleção List<Entity>
        List<Entity> entities = criteria.getResultList();
+
+
+
+
+
+
+
+
+       Usando MeteModel API para modelar classes
+ Use a API MeteModel para criar um metamodel das entidades gerencidas em unidade de persitente especifica 
+
+ Para cada class de entidade em um pacote especifico, uma class de metamodelo é criada com um sublinhado final e com atributos que correspondem aos campos ou
+propriedades da classe.
+
+Para a classe 
+package com.example;
+...
+@Entity
+public class Pet {
+    @Id
+    protected Long id;
+    protected String name;
+    protected String color;
+    @ManyToOne
+    protected Set<Person> owners;
+    ...
+}
+
+cria-se um metamodel
+
+package com.example;
+...
+@Static Metamodel(Pet.class)
+public class Pet_ {
+
+    public static volatile SingularAttribute<Pet, Long> id;
+    public static volatile SingularAttribute<Pet, String> name;
+    public static volatile SingularAttribute<Pet, String> color;
+    public static volatile SetAttribute<Pet, Person> owners;
+}
+
+
+            Utilizando metamodel
+ As classes de metamodels que corresponde a uma Entity class  são do seguinte tipo:
+  javax.persistence.metamodel.EntityType<T>
+
+ Processadore de anotação normalmente geram classes de metamodel em tempo de execução. Os desenvolvedores que utilizam consultas criteria podem fazer da
+seguinte forma
